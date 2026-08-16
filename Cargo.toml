@@ -33,7 +33,7 @@ name = "beat_this"
 path = "src/lib.rs"
 
 [features]
-default = ["decode", "serde"]
+default = ["decode", "serde", "cli"]
 cli = ["decode", "dep:clap", "dep:glob", "dep:hound", "dep:serde_json", "serde"]
 decode = ["dep:symphonia"]
 serde = ["dep:serde"]

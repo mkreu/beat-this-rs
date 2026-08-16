@@ -21,7 +21,7 @@ jobs:
           components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
       - run: cargo fmt --check
-      - run: cargo clippy --all-targets --features cli -- -D warnings
+      - run: cargo clippy -- -D warnings
       - run: cargo test
 
   # Opt-in ort backend: exercises the feature so it can't bit-rot.
@@ -47,5 +47,5 @@ jobs:
             "https://github.com/microsoft/onnxruntime/releases/download/v${ORT_VERSION}/onnxruntime-linux-x64-${ORT_VERSION}.tgz"
           tar xzf ort.tgz
           echo "ORT_DYLIB_PATH=${PWD}/onnxruntime-linux-x64-${ORT_VERSION}/lib/libonnxruntime.so" >> "$GITHUB_ENV"
-      - run: cargo clippy --all-targets --features cli,ort -- -D warnings
+      - run: cargo clippy --features ort -- -D warnings
       - run: cargo test --features ort

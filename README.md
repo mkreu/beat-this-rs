@@ -35,7 +35,7 @@ repo, so you can run inference immediately after building:
 ```bash
 git clone git@github.com:danigb/beat-this-rs.git
 cd beat-this-rs
-cargo build --release --features cli
+cargo build --release
 
 # Run with the bundled small model (zero setup):
 ./target/release/beat-this input.mp3 --model models/beat_this_small.onnx
@@ -49,7 +49,7 @@ Optionally install the binary you just built onto your `PATH`, so you can call
 `beat-this` from anywhere instead of `./target/release/beat-this`:
 
 ```bash
-cargo install --path . --features cli   # installs to ~/.cargo/bin/beat-this
+cargo install --path .   # installs to ~/.cargo/bin/beat-this
 beat-this input.mp3 --model models/beat_this_small.onnx
 ```
 
@@ -62,7 +62,7 @@ checkout, see [Install](#install).
 **As a CLI tool** (from crates.io):
 
 ```bash
-cargo install beat-this --features cli
+cargo install beat-this
 ```
 
 The published crate does **not** bundle the model files. The committed mel + small models
@@ -118,7 +118,7 @@ also build the ONNX Runtime backend (for `--runtime ort` and `--profile`), enabl
 `ort` feature:
 
 ```bash
-cargo build --release --features cli,ort
+cargo build --release --features ort
 ```
 
 It loads `libonnxruntime` at runtime — install it (`brew install onnxruntime` on macOS)
@@ -161,13 +161,15 @@ beat-this "music/**/*.mp3" --json
 
 ## Library usage
 
-The default feature set includes audio file decoding and `Tensor` serialization for API
-compatibility, but does not pull in CLI-only dependencies. Disable default features for
-a minimal raw-sample library build; resampling remains available without them. The
-`decode` and `serde` features can also be enabled independently, and `cli` enables both.
+The default feature set pulls on a lot of dependencies required for the CLI. If you intend to use 
+the crate as a library, you should disable default features and enable only the ones needed:
+
+- `decode` for audio file decoding using `symphonia`
+- `serde` for serialization of the `Tensor` struct
+- `ort` for the ONNX Runtime backend.
 
 ```toml
-beat-this = { version = "1", default-features = false }
+beat-this = { version = "1", default-features = false, features = ["decode"] }
 ```
 
 ```rust
