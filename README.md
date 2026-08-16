@@ -35,7 +35,7 @@ repo, so you can run inference immediately after building:
 ```bash
 git clone git@github.com:danigb/beat-this-rs.git
 cd beat-this-rs
-cargo build --release
+cargo build --release --features cli
 
 # Run with the bundled small model (zero setup):
 ./target/release/beat-this input.mp3 --model models/beat_this_small.onnx
@@ -49,7 +49,7 @@ Optionally install the binary you just built onto your `PATH`, so you can call
 `beat-this` from anywhere instead of `./target/release/beat-this`:
 
 ```bash
-cargo install --path .   # installs to ~/.cargo/bin/beat-this
+cargo install --path . --features cli   # installs to ~/.cargo/bin/beat-this
 beat-this input.mp3 --model models/beat_this_small.onnx
 ```
 
@@ -62,7 +62,7 @@ checkout, see [Install](#install).
 **As a CLI tool** (from crates.io):
 
 ```bash
-cargo install beat-this
+cargo install beat-this --features cli
 ```
 
 The published crate does **not** bundle the model files. The committed mel + small models
@@ -118,7 +118,7 @@ also build the ONNX Runtime backend (for `--runtime ort` and `--profile`), enabl
 `ort` feature:
 
 ```bash
-cargo build --release --features ort
+cargo build --release --features cli,ort
 ```
 
 It loads `libonnxruntime` at runtime — install it (`brew install onnxruntime` on macOS)
@@ -160,6 +160,11 @@ beat-this "music/**/*.mp3" --json
 | `--profile <PREFIX>`    | Write ORT profiling trace (requires `--features ort`)             |
 
 ## Library usage
+
+The default feature set is library-only, so depending on `beat-this` does not pull in
+the CLI argument parsing, output serialization, globbing, or WAV-writing crates. Enable
+the `cli` feature only when building or installing the `beat-this` executable. The
+`serde` feature separately enables serialization support for `Tensor`.
 
 ```rust
 use std::path::Path;
