@@ -33,8 +33,9 @@ name = "beat_this"
 path = "src/lib.rs"
 
 [features]
-default = []
-cli = ["dep:clap", "dep:glob", "dep:hound", "dep:serde_json", "serde"]
+default = ["decode", "serde"]
+cli = ["decode", "dep:clap", "dep:glob", "dep:hound", "dep:serde_json", "serde"]
+decode = ["dep:symphonia"]
 serde = ["dep:serde"]
 # Opt-in ONNX Runtime backend (`--runtime ort`). Pure-Rust `rten` is the default
 # and needs no system libraries; `ort` is kept as a maintainer reference oracle
@@ -52,7 +53,7 @@ ndarray = { version = "0.17", optional = true }
 rten = { version = "0.24", features = ["fft"] }
 rten-tensor = { version = "0.24" }
 anyhow = "1"
-symphonia = { version = "0.6", features = ["all"] }
+symphonia = { version = "0.6", features = ["all"], optional = true }
 rubato = "3.0"
 hound = { version = "3.5", optional = true }
 clap = { version = "4", features = ["derive"], optional = true }

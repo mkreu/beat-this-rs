@@ -161,10 +161,14 @@ beat-this "music/**/*.mp3" --json
 
 ## Library usage
 
-The default feature set is library-only, so depending on `beat-this` does not pull in
-the CLI argument parsing, output serialization, globbing, or WAV-writing crates. Enable
-the `cli` feature only when building or installing the `beat-this` executable. The
-`serde` feature separately enables serialization support for `Tensor`.
+The default feature set includes audio file decoding and `Tensor` serialization for API
+compatibility, but does not pull in CLI-only dependencies. Disable default features for
+a minimal raw-sample library build; resampling remains available without them. The
+`decode` and `serde` features can also be enabled independently, and `cli` enables both.
+
+```toml
+beat-this = { version = "1", default-features = false }
+```
 
 ```rust
 use std::path::Path;
